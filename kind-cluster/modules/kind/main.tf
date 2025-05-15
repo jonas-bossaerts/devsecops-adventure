@@ -6,8 +6,16 @@ resource "null_resource" "create_kind_cluster" {
     EOT
   }
 
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOT
+      kind delete cluster --name ${self.triggers.cluster_name}
+    EOT
+  }
+
   triggers = {
-    always_run = timestamp() # zodat je altijd kunt applyen
+    cluster_name = var.cluster_name
+    always_run   = timestamp() # zodat je altijd kunt applyen
   }
 }
 
