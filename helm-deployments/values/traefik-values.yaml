@@ -1,0 +1,46 @@
+# API en dashboard configuratie
+api:
+  dashboard: true
+  insecure: true  # Dit is belangrijk voor lokale ontwikkeling
+
+# Dashboard toegang
+dashboard:
+  enabled: true
+
+# Ingressroute voor het dashboard zonder authenticatie
+ingressRoute:
+  dashboard:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+    entryPoints: ["web"]  # Zorg dat web entrypoint wordt gebruikt
+
+# Poorten configuratie
+ports:
+  web:
+    port: 80
+    exposedPort: 80
+    expose: true
+    protocol: TCP
+  websecure:
+    port: 443
+    exposedPort: 443
+    expose: true
+    protocol: TCP
+  traefik:
+    port: 9000
+    exposedPort: 9000
+    expose: true
+    protocol: TCP
+
+# Service type
+service:
+  type: NodePort
+
+# Extra argumenten om API en dashboard toegankelijk te maken
+additionalArguments:
+  - "--api=true"
+  - "--api.dashboard=true"
+  - "--api.insecure=true"  # Geen authenticatie voor lokale ontwikkeling
+  - "--log.level=INFO"     # Hogere logging voor debugging
+  - "--accesslog=true"     # Access logs inschakelen
